@@ -10,9 +10,16 @@ probabilities = []
 root = tk.Tk()
 root.title("Probability Visualizer")
 
-# Create a scrolled text widget for displaying messages
-text_area = scrolledtext.ScrolledText(root, height=10, state='disabled')
-text_area.pack(padx=10, pady=10)
+# Ensure the GUI window has a minimum size
+root.minsize(800, 600)
+
+# Create a frame for the chat and input widgets to control layout more precisely
+chat_frame = tk.Frame(root)
+chat_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+# Create a scrolled text widget for displaying messages, with vertical expansion
+text_area = scrolledtext.ScrolledText(chat_frame, height=10, state='disabled')
+text_area.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
 # Function to update the graphical display and text area
 def update_display(message):
@@ -56,19 +63,19 @@ def handle_input(event):
     except ValueError:
         update_display("Error: Invalid input. Please enter a valid number.")
 
-# Create an entry widget for user input
-input_entry = tk.Entry(root)
-input_entry.pack(padx=10, pady=5)
+# Create an entry widget for user input, making it fill the width of the chat_frame
+input_entry = tk.Entry(chat_frame)
+input_entry.pack(padx=10, pady=5, fill=tk.X)
 input_entry.bind("<Return>", handle_input)
-input_entry.focus()
+input_entry.focus()  # Set focus to make cursor visible
 
 # Create a Matplotlib figure and a bar graph
 fig = Figure(figsize=(5, 4), dpi=100)
 ax = fig.add_subplot(111)
 
-# Embed the figure in the Tkinter window
+# Embed the figure in the Tkinter window below the chat_frame
 canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
 canvas.draw()
-canvas.get_tk_widget().pack(fill=tk.BOTH, expand=1)
+canvas.get_tk_widget().pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
 root.mainloop()
